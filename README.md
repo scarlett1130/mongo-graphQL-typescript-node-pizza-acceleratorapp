@@ -11,8 +11,6 @@ docker docker-compose\
 
 ## Getting Started
 
-an open source project 
-
 ### Prerequisites
 graphql\
 appolo\
@@ -88,6 +86,4 @@ tslint --init // generate tslint file
 
 ...see the package.json for 
 
-
- "# mongo-graphQL-typescript-node-pizza-acceleratorapp" 
 "# mongo-graphQL-typescript-node-pizza-acceleratorapp" 
