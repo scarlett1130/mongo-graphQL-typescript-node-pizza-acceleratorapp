@@ -36,25 +36,24 @@ export default class OrderModel {
         }
       }
     });
-  }
+  } 
 
-  
-
+  //filter order and do analyse
   async getFilterOrders(data: FilterInput): Promise<WeeklyData[] | null> {
     // return filter Orders
     const {pizza, startDate, endDate} = data;
-    let filterCondition = {};
-    let tmp_start = convertDate(startDate);
     
+    let filterCondition = {};                 //for mogno find
     
-    if(endDate != ""){
+    if(endDate != ""){        //if exist endDate
       filterCondition = {
         date: {
           $gte: convertDate(startDate),
           $lte: convertDate(endDate)
         }
       }
-    }else{
+    }else{    //if not endDate
+      let tmp_start = convertDate(startDate);
       let start = new Date(tmp_start.getFullYear(), tmp_start.getMonth(), 1);
       let end = new Date(tmp_start.getFullYear(), tmp_start.getMonth() + 1, 0);
 
@@ -66,6 +65,7 @@ export default class OrderModel {
       }
     }
 
+    //get order data using filter
     const filteredOrders = await OrderMongooseModel.find({
       ...filterCondition
     }).populate({
@@ -87,12 +87,16 @@ export default class OrderModel {
 
     // Group the data by week
     const weeklyData: Record<number, WeeklyData> = {}
-    let ingredient_amount: number[];
+
+    // data for each week analyse
+    let ingredient_amount: number[];  
     let ingredient_cost: number[];
+
     filteredOrders.forEach(order => {
       const week = getWeek(order.date)
       // console.log("week", week);
       if (!weeklyData[week]) {
+        //initialize
         ingredient_amount = Array.from({length: order.sales[0].pizza.recipe.ingredients.length}, () => 0);
         ingredient_cost = Array.from({length: order.sales[0].pizza.recipe.ingredients.length}, () => 0);
         weeklyData[week] = {
@@ -107,19 +111,17 @@ export default class OrderModel {
       
       order.sales.forEach(sale => {
         // console.log("sales",sale);
-        if(pizza === "all"){
-          weeklyData[week].unitSold += sale.amount
+        if(pizza === "all"){    //if select all pizza
+          weeklyData[week].unitSold += sale.amount      
           sale.pizza.recipe.ingredients.map((ingredient, index) => {
-            // console.log("index", ingredient);
             ingredient_amount[index] += ingredient.amount * sale.amount;
             ingredient_cost[index] += Number((ingredient.amount * sale.amount * ingredient.ingredient.cost).toFixed(2));
             weeklyData[week].ingredientsUsed[index] = { ingredient: ingredient.ingredient, amount: 0, cost: 0 }
           })
           weeklyData[week].sales += sale.amount * sale.pizza.cost
-        }else if(sale.pizza._id == pizza){
-          weeklyData[week].unitSold += sale.amount
+        }else if(sale.pizza._id == pizza){    // if select only one
+          weeklyData[week].unitSold += sale.amount      
           sale.pizza.recipe.ingredients.map((ingredient, index) => {
-            // console.log("index", ingredient);
             ingredient_amount[index] += ingredient.amount * sale.amount;
             ingredient_cost[index] += Number((ingredient.amount * sale.amount * ingredient.ingredient.cost).toFixed(2));
             weeklyData[week].ingredientsUsed[index] = { ingredient: ingredient.ingredient, amount: 0, cost: 0 }

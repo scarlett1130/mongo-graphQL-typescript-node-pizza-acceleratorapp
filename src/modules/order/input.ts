@@ -18,7 +18,7 @@ export class SaleInput {
   amount: number;
 }
 
-@InputType()
+@InputType()    //input for filter form
 export class FilterInput {
   @Field()
   startDate!: string;

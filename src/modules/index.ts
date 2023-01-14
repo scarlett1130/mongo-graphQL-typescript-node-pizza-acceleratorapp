@@ -6,9 +6,9 @@ import OrderResolver from "./order/resolver";
 
 // Important: Add all your module's resolver in this
 export const resolvers: [Function, ...Function[]] = [
-  UnitResolver,
-  IngredientResolver,
-  RecipeResolver,
-  PizzaResolver,
-  OrderResolver
+  UnitResolver,         
+  IngredientResolver,   
+  RecipeResolver,       
+  PizzaResolver,        
+  OrderResolver     //main part of this project
 ];
