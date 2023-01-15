@@ -6,8 +6,9 @@ WORKDIR /app
 
 
 # install app dependencies
-COPY package.json ./
-COPY package-lock.json ./
+COPY ["package*.json","./"]
+# COPY package.json ./
+# COPY package-lock.json ./
 RUN npm install 
 EXPOSE 5030
 
