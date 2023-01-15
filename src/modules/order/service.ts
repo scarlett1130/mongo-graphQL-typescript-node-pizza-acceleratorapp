@@ -26,4 +26,8 @@ export default class OrderService {
     return newOrder;
   }
 
+  // public async makeData(){
+  //   return this.orderModel.makeData();
+  // }
+
 }

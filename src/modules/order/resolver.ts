@@ -23,6 +23,7 @@ export default class OrderResolver {
 
   @Query((returns) => [Order])
   async getAllOrders() {
+    // await this.orderService.makeData();
     const orders = await this.orderService.getAllOrders();
     return orders;
   }
@@ -41,4 +42,5 @@ export default class OrderResolver {
     const order = await this.orderService.addOrder(createOrderData);
     return order;
   }
+
 }

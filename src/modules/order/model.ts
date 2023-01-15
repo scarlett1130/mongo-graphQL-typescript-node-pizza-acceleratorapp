@@ -18,6 +18,32 @@ export default class OrderModel {
     return order.save();
   }
 
+  // create Order
+  // async makeData(){
+  //   let data = []
+
+  //   for (const order of data) {
+  //     const insertData = new OrderMongooseModel({
+  //       date: order.FIELD1,
+  //       sales: [
+  //         {
+  //           pizza: "0",
+  //           amount: order.Pepperoni
+  //         },
+  //         {
+  //           pizza: "1",
+  //           amount: order.Branco
+  //         },
+  //         {
+  //           pizza: "2",
+  //           amount: order["All Dressed"]
+  //         }
+  //       ]
+  //     });
+  //     await insertData.save();
+  //   }
+  // }
+
   async getAllOrders(): Promise<Order[] | null> {
     // return all Orders
     return OrderMongooseModel.find().populate({
