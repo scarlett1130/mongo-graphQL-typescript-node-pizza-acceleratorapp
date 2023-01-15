@@ -141,7 +141,7 @@ export default class OrderModel {
           weeklyData[week].unitSold += sale.amount      
           sale.pizza.recipe.ingredients.map((ingredient, index) => {
             ingredient_amount[index] += ingredient.amount * sale.amount;
-            ingredient_cost[index] += Number((ingredient.amount * sale.amount * ingredient.ingredient.cost).toFixed(2));
+            ingredient_cost[index] += ingredient.amount * sale.amount * ingredient.ingredient.cost;
             weeklyData[week].ingredientsUsed[index] = { ingredient: ingredient.ingredient, amount: 0, cost: 0 }
           })
           weeklyData[week].sales += sale.amount * sale.pizza.cost
@@ -149,20 +149,26 @@ export default class OrderModel {
           weeklyData[week].unitSold += sale.amount      
           sale.pizza.recipe.ingredients.map((ingredient, index) => {
             ingredient_amount[index] += ingredient.amount * sale.amount;
-            ingredient_cost[index] += Number((ingredient.amount * sale.amount * ingredient.ingredient.cost).toFixed(2));
+            ingredient_cost[index] += ingredient.amount * sale.amount * ingredient.ingredient.cost;
             weeklyData[week].ingredientsUsed[index] = { ingredient: ingredient.ingredient, amount: 0, cost: 0 }
           })
           weeklyData[week].sales += sale.amount * sale.pizza.cost
         }
       })
+      // console.log("ingredient_cost", ingredient_cost)
       ingredient_amount.map((amount, index) => {
         weeklyData[week].ingredientsUsed[index] = { ...weeklyData[week].ingredientsUsed[index], amount: amount, cost: Number(ingredient_cost[index].toFixed(2)) }
-        weeklyData[week].costOfIngredients +=  Number(ingredient_cost[index].toFixed(2))
+        // weeklyData[week].costOfIngredients +=  ingredient_cost[index]
       })
     })
-
+    
+    // console.log("weekly", weeklyData)
     let result: WeeklyData[] = []
     Object.entries(weeklyData).forEach(([week, data]) => {
+      data.ingredientsUsed.map(ingre=>{
+        data.costOfIngredients += ingre.cost
+      })
+      
       result = [...result, {
         ...data, 
         costOfIngredients: Number(data.costOfIngredients.toFixed(2)),
